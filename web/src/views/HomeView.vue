@@ -2,9 +2,9 @@
   <div class="home">
     <Navbar />
 
-    <div class="conteudo">
-      <img class="imagem-fundo" src="../assets/image/homem-estudando.png" alt="Imagem" />
-      <div class="texto-sobre-imagem">
+    <div class="content">
+      <img class="img-content" src="../assets/image/homem-estudando.png" alt="Imagem" />
+      <div class="content-text">
         <h2>Uma ampla seleção de cursos</h2>
         <p>Escolha entre várias opções de cursos em vídeo online e presenciais para melhorar seus estudos.</p>
         <button @click="entrar">Entrar</button>
@@ -13,37 +13,40 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script>
 import Navbar from '@/components/Navbar.vue'; 
 
-@Options({
+export default {
   components: {
     Navbar
-  }
-})
-export default class HomeView extends Vue {
-  entrar() {
-    console.log('Botão "Entrar" clicado');
+  },
+  methods: {
+    entrar() {
+      console.log('Botão "Entrar" clicado');
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    const documentTitle = typeof to.meta.title === 'string' ? to.meta.title : 'Seu Título Padrão';
+    document.title = documentTitle;
+    next();
   }
 }
 </script>
 
 <style scoped>
 
-.conteudo {
+.content {
   position: relative;
   overflow: hidden;
 }
 
-.imagem-fundo {
+.img-content {
   width: 100vw;
   height: 550px;
   object-fit: cover;
   display: block;
 }
-
-.texto-sobre-imagem {
+.content-text {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -52,15 +55,15 @@ export default class HomeView extends Vue {
   color: #FFFFFF;
 }
 
-.texto-sobre-imagem h2 {
+.content-text h2 {
   font-size: 42px;
 }
 
-.texto-sobre-imagem p {
+.content-text p {
   font-size: 1.125rem;
 }
 
-.texto-sobre-imagem button {
+.content-text button {
   background-color: var(--primary);
   color: var(--white);
   padding: 8px 16px;
@@ -72,7 +75,7 @@ export default class HomeView extends Vue {
   transition: 0.5s;
 }
 
-.texto-sobre-imagem button:hover {
+.content-text button:hover {
   background-color: #0b7334;
 }
 
