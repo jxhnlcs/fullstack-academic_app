@@ -17,20 +17,35 @@ const getUserByUsernameAndPassword = (username: string, password: string, callba
   });
 };
 
-const insertUser = (name: string, username: string, password: string, email: string, callback: any) => {
+const insertUser = (
+  name: string,
+  username: string,
+  password: string,
+  email: string,
+  telefone: string,
+  cep: string,
+  cpf: string,
+  nascimento: string,
+  documento: Buffer, // Alterado o tipo para Buffer para armazenar a imagem/documento
+  callback: (err: Error | null) => void
+) => {
   const insertUserQuery = `
-    INSERT INTO Users (Name, Username, Password, Email)
-    VALUES (?, ?, SHA2(?, 256), ?)
+    INSERT INTO Users (Name, Username, Password, Email, Telefone, CEP, CPF, Nascimento, Documento)
+    VALUES (?, ?, SHA2(?, 256), ?, ?, ?, ?, ?, ?)
   `;
 
-  db.query(insertUserQuery, [name, username, password, email], (err, result) => {
-    if (err) {
-      console.error('Erro ao cadastrar usuário na tabela Users:', err);
-      return callback(err);
-    }
+  db.query(
+    insertUserQuery,
+    [name, username, password, email, telefone, cep, cpf, nascimento, documento],
+    (err) => {
+      if (err) {
+        console.error('Erro ao cadastrar usuário na tabela Users:', err);
+        return callback(err);
+      }
 
-    return callback(null);
-  });
+      return callback(null);
+    }
+  );
 };
 
 export { getUserByUsernameAndPassword, insertUser };

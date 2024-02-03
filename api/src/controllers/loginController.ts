@@ -31,15 +31,26 @@ const fazerLogin = (req: Request, res: Response) => {
 };
 
 const cadastrarUsuario = (req: Request, res: Response) => {
-  const { Name, Username, Password, Email } = req.body;
+  const { Name, Username, Password, Email, Telefone, CEP, CPF, Nascimento, Documento } = req.body;
 
-  insertUser(Name, Username, Password, Email, (err: any) => {
-    if (err) {
-      return res.status(500).json({ message: 'Erro interno do servidor' });
+  insertUser(
+    Name,
+    Username,
+    Password,
+    Email,
+    Telefone,
+    CEP,
+    CPF,
+    Nascimento,
+    Documento,
+    (err: Error | null) => {
+      if (err) {
+        return res.status(500).json({ message: 'Erro interno do servidor' });
+      }
+
+      return res.status(201).json({ message: 'Usuário cadastrado com sucesso' });
     }
-
-    return res.status(201).json({ message: 'Usuário cadastrado com sucesso' });
-  });
+  );
 };
 
 export { fazerLogin, cadastrarUsuario };

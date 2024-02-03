@@ -15,13 +15,13 @@ const getAllCourses = (callback: any) => {
 };
 
 const createCourse = (course: any, callback: (err: Error | null) => void) => {
-  const { Title, Description, Price, Type, Model } = course;
+  const { Title, Description, Price, Type, Model, Category } = course;
   const query = `
-    INSERT INTO Courses (Title, Description, Price, Type, Model)
+    INSERT INTO Courses (Title, Description, Price, Type, Model, Category)
     VALUES (?, ?, ?, ?, ?)
   `;
 
-  db.query(query, [Title, Description, Price, Type, Model], (err) => {
+  db.query(query, [Title, Description, Price, Type, Model, Category], (err) => {
     if (err) {
       return callback(err);
     }
@@ -31,14 +31,20 @@ const createCourse = (course: any, callback: (err: Error | null) => void) => {
 };
 
 const updateCourse = (courseId: string, updatedCourse: any, callback: (err: Error | null) => void) => {
-  const { Title, Description, Price, Type, Model } = updatedCourse;
+  const { Title, Description, Price, Type, Model, Category } = updatedCourse;
   const query = `
     UPDATE Courses
-    SET Title = ?, Description = ?, Price = ?, Type = ?, Model = ?
+    SET 
+      Title = IFNULL(?, Title),
+      Description = IFNULL(?, Description),
+      Price = IFNULL(?, Price),
+      Type = IFNULL(?, Type),
+      Model = IFNULL(?, Model),
+      Category = IFNULL(?, Category)
     WHERE CourseID = ?
   `;
 
-  db.query(query, [Title, Description, Price, Type, Model, courseId], (err) => {
+  db.query(query, [Title, Description, Price, Type, Model, Category, courseId], (err) => {
     if (err) {
       return callback(err);
     }

@@ -13,9 +13,9 @@ const getAllCoursesController = (req: Request, res: Response) => {
 };
 
 const createCourseController = (req: Request, res: Response) => {
-  const { Title, Description, Price, Type, Model } = req.body;
+  const { Title, Description, Price, Type, Model, Category } = req.body;
 
-  const newCourse = { Title, Description, Price, Type, Model };
+  const newCourse = { Title, Description, Price, Type, Model, Category };
 
   createCourse(newCourse, (err) => {
     if (err) {
@@ -29,9 +29,9 @@ const createCourseController = (req: Request, res: Response) => {
 
 const updateCourseController = (req: Request, res: Response) => {
   const courseId = req.params.id;
-  const { Title, Description, Price, Type, Model } = req.body;
+  const { Title, Description, Price, Type, Model, Category } = req.body;
 
-  const updatedCourse = { Title, Description, Price, Type, Model };
+  const updatedCourse = { Title, Description, Price, Type, Model, Category };
 
   updateCourse(courseId, updatedCourse, (err) => {
     if (err) {
