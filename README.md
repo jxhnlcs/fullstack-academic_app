@@ -12,7 +12,20 @@ O Enrofy é um site de cursos onde alunos podem se cadastrar e comprar cursos pa
 
 Siga as instruções abaixo para executar o sistema em sua máquina local.
 
-1. Abra dois terminais
+### Configuração do Banco de dados
+
+1. Navegue até a pasta db:
+
+- Execute as consultas MySQL para criar o banco, criar as tabelas e inserir os cursos
+- Insirá as variáveis de ambiente no .env.example e renomeie ele para .env
+
+```bash
+DB_HOST=seu_host
+DB_USER=seu_usuario
+DB_PASSWORD=sua_senha
+DB_DATABASE=sua_database
+DB_PORT=seu_port
+```
 
 ### Configuração do Backend
 
