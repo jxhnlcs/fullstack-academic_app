@@ -40,7 +40,7 @@
                   </p>
                 </div>
                 <p class="card-text">
-                  <i class="bx bx-dollar"></i> R$ {{ course.Price.toFixed(2) }}
+                  <i class="bx bx-dollar"></i> R$ {{ course.Price.toFixed(2).replace('.', ',') }}
                 </p>
                 <p class="card-text">
                   <i class="bx bx-walk"></i> {{ course.Model }}
@@ -99,12 +99,8 @@ export default {
   },
 
   methods: {
-    entrar() {
-      console.log('Botão "Entrar" clicado');
-    },
 
     toggleFilterDropdown() {
-      console.log("abrindo")
       this.showFilterDropdown = !this.showFilterDropdown;
     },
 
