@@ -1,5 +1,7 @@
 <template>
+
   <div class="home">
+
     <Navbar />
 
     <div class="content">
@@ -44,16 +46,21 @@
       </div>
     </div>
 
+    <Footer />
+
   </div>
+
 </template>
 
 <script>
 import Navbar from '@/components/Navbar.vue';
+import Footer from '@/components/Footer.vue';
 import axios from '@/utils/axios'
 
 export default {
   components: {
-    Navbar
+    Navbar,
+    Footer,
   },
 
   data() {
@@ -138,6 +145,7 @@ export default {
   transform: translate(-50%, -50%);
   text-align: center;
   color: #FFFFFF;
+  cursor: default;
 }
 
 .content-text h2 {
@@ -165,7 +173,7 @@ export default {
 }
 
 .courses {
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   padding: 40px 0;
 }
 
@@ -178,6 +186,10 @@ export default {
   transform: scale(1.05);
 }
 
+.text-center{
+  cursor: default;
+}
+
 .card-body {
   display: flex;
   flex-direction: column;
@@ -186,6 +198,11 @@ export default {
 
 .card-title {
   font-size: 1.25rem;
+  cursor: default;
+}
+
+.card-text{
+  cursor: default;
 }
 
 .description-container {
@@ -210,4 +227,5 @@ export default {
   background-color: var(--primary-black);
   border-color: var(--primary-black);
 }
+
 </style>

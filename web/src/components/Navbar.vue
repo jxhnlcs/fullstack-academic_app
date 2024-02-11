@@ -46,6 +46,7 @@ export default {
 
 .logo {
   max-height: 90px;
+  cursor: default;
 }
 
 .nav-list {
