@@ -1,5 +1,4 @@
 <template>
-
   <div class="home">
 
     <Navbar />
@@ -16,8 +15,19 @@
     <div class="courses">
       <div class="container">
         <h2 class="text-center mb-4">Conheça nossos cursos</h2>
+        <div class="filter-section">
+          <div class="filter-icon" @click="toggleFilterDropdown">
+            <i class="bx bx-filter"></i>
+          </div>
+          <div v-show="showFilterDropdown" class="filter-dropdown">
+            <div v-for="(iconClass, type) in iconMap" :key="type" class="form-check">
+              <input type="checkbox" :id="type" v-model="selectedFilters" :value="type" class="form-check-input" />
+              <label :for="type" class="form-check-label">{{ type }}</label>
+            </div>
+          </div>
+        </div>
         <div class="row">
-          <div v-for="course in courses" :key="course.CourseID" class="col-md-4 mb-4">
+          <div v-for="course in filteredCourses" :key="course.CourseID" class="col-md-4 mb-4">
             <div class="card">
               <div class="card-body d-flex flex-column">
                 <h5 class="card-title">
@@ -49,7 +59,6 @@
     <Footer />
 
   </div>
-
 </template>
 
 <script>
@@ -66,12 +75,51 @@ export default {
   data() {
     return {
       courses: [],
+      iconMap: {
+        Tecnologia: 'bx bx-code',
+        Marketing: 'bx bx-bar-chart',
+        Design: 'bx bx-paint',
+        Arte: 'bx bx-image',
+        Idiomas: 'bx bx-globe',
+        Negócios: 'bx bx-briefcase',
+        Exercício: 'bx bx-dumbbell',
+      },
+      selectedFilters: [],
+      showFilterDropdown: false,
     };
+  },
+
+  computed: {
+    filteredCourses() {
+      if (this.selectedFilters.length === 0) {
+        return this.courses;
+      }
+      return this.courses.filter(course => this.selectedFilters.includes(course.Type));
+    },
   },
 
   methods: {
     entrar() {
       console.log('Botão "Entrar" clicado');
+    },
+
+    toggleFilterDropdown() {
+      console.log("abrindo")
+      this.showFilterDropdown = !this.showFilterDropdown;
+    },
+
+    getIconColor(type) {
+      const colorMap = {
+        Tecnologia: '#3498db',
+        Marketing: '#e74c3c',
+        Design: '#2ecc71',
+        Arte: '#f39c12',
+        Idiomas: '#9b59b6',
+        Negócios: '#34495e',
+        Exercício: '#1abc9c',
+      };
+
+      return colorMap[type] || '#000';
     },
 
     async fetchCourses() {
@@ -186,7 +234,7 @@ export default {
   transform: scale(1.05);
 }
 
-.text-center{
+.text-center {
   cursor: default;
 }
 
@@ -201,7 +249,7 @@ export default {
   cursor: default;
 }
 
-.card-text{
+.card-text {
   cursor: default;
 }
 
@@ -226,6 +274,52 @@ export default {
 .btn-primary:hover {
   background-color: var(--primary-black);
   border-color: var(--primary-black);
+}
+
+.filter-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.filter-icon {
+  background-color: #ffffff;
+  color: rgb(99, 99, 99);
+  font-size: 20px;
+  border-radius: 8px;
+  border: solid 1px #cfcfcf;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.5s;
+}
+
+.filter-icon:hover{
+  color: var(--primary);
+  box-shadow: rgba(0, 190, 76, 0.436) 0px 2px 8px 0px;
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 1;
+}
+
+.filter-dropdown h3 {
+  margin-bottom: 5px;
+}
+
+.filter-dropdown label {
+  display: block;
+  margin-bottom: 5px;
 }
 
 </style>
