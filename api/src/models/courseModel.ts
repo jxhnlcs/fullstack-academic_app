@@ -18,7 +18,7 @@ const createCourse = (course: any, callback: (err: Error | null) => void) => {
   const { Title, Description, Price, Type, Model, Category } = course;
   const query = `
     INSERT INTO Courses (Title, Description, Price, Type, Model, Category)
-    VALUES (?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?)
   `;
 
   db.query(query, [Title, Description, Price, Type, Model, Category], (err) => {
