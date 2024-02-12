@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="#">
-        <img class="logo" src="../assets/image/logo.png" alt="Logo">
+        <img class="logo" src="../assets/image/logo.png" alt="Logo" />
       </a>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { jwtDecode } from 'jwt-decode'
+import { jwtDecode } from "jwt-decode";
 export default {
   data() {
     return {
@@ -38,12 +38,17 @@ export default {
   },
 
   created() {
-    const token = localStorage.getItem('token');
-    const decodedToken = jwtDecode(token);
-    console.log(decodedToken)
-    this.name = decodedToken.name
-    if (token) {
-      this.isLoggedIn = true;
+    const token = localStorage.getItem("token");
+
+    if (token && typeof token === "string") {
+      try {
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        this.name = decodedToken.name;
+        this.isLoggedIn = true;
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
     }
   },
 };
@@ -52,7 +57,7 @@ export default {
 <style scoped>
 .navbar {
   padding: 1px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 4px 12px rgba(0, 0, 0, .08);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .logo {
@@ -101,7 +106,6 @@ export default {
 }
 
 @media (max-width: 768px) {
-
   .user-nav {
     display: none;
   }
