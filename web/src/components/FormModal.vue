@@ -14,14 +14,14 @@
             <h3>Informações Principais</h3>
             <form @submit.prevent="nextStep">
 
-              <label for="name">Nome:</label>
+              <label for="name">Nome*</label>
               <input v-model="name" type="text" id="name">
 
-              <label for="email">E-mail:</label>
+              <label for="email">E-mail*</label>
               <input v-model="email" type="email" id="email">
 
-              <label for="phone">Telefone:</label>
-              <input v-model="phone" type="tel" id="phone">
+              <label for="phone">Telefone*</label>
+              <input @input="formatarTelefone" v-model="phone" type="tel" id="phone">
 
               <div class="next">
                 <button class="prosseguir" type="submit"><i class='bx bx-right-arrow-alt'></i></button>
@@ -32,13 +32,13 @@
           <div v-else-if="step === 2">
             <h3>Informações Adicionais</h3>
             <form @submit.prevent="nextStep">
-              <label for="cep">CEP:</label>
-              <input v-model="cep" type="text" id="cep">
+              <label for="cep">CEP*</label>
+              <input @input="formatarCep" v-model="cep" type="text" id="cep">
 
-              <label for="cpf">CPF:</label>
-              <input v-model="cpf" type="text" id="cpf">
+              <label for="cpf">CPF*</label>
+              <input @input="formatarCpf" v-model="cpf" type="text" id="cpf">
 
-              <label for="birthdate">Data de Nascimento:</label>
+              <label for="birthdate">Data de Nascimento*</label>
               <input v-model="birthdate" type="date" id="birthdate">
 
               <div class="buttons-next">
@@ -52,13 +52,13 @@
             <h3>Informações Finais</h3>
             <form @submit.prevent="submitForm">
 
-              <label for="username">Usuário:</label>
+              <label for="username">Usuário*</label>
               <input v-model="username" type="text" id="username">
 
-              <label for="password">Senha:</label>
+              <label for="password">Senha*</label>
               <input v-model="password" type="password" id="password">
 
-              <label for="document">Enviar Documento:</label>
+              <label for="document">Enviar Documento*</label>
               <input class="file" type="file" id="document" accept=".pdf, .jpg, .png">
 
               <div class="buttons-next">
@@ -103,6 +103,36 @@ export default {
 
   methods: {
 
+    formatarTelefone(telefone) {
+      const telefoneFormatado = event.target.value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+      this.phone = telefoneFormatado;
+    },
+
+    formatarCep(cep) {
+      const cepFormatado = event.target.value.replace(/(\d{5})(\d{3})/, '$1-$2');
+      this.cep = cepFormatado;
+    },
+
+    formatarCpf(cpf) {
+      const cpfFormatado = event.target.value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+      this.cpf = cpfFormatado;
+    },
+
+    isValidName(value) {
+      const regex = /^[a-zA-ZÀ-ÿ\s]+$/;
+      return regex.test(value);
+    },
+
+    isValidNumber(value) {
+      const regex = /^[0-9]+$/;
+      return regex.test(value);
+    },
+
+    isValidPhone(value) {
+      const regex = /^[0-9]+$/;
+      return regex.test(value);
+    },
+
     openModal() {
       this.showModal = true;
     },
@@ -121,7 +151,44 @@ export default {
 
     async submitForm() {
       try {
-        const response = await axios.post('/cadastrar', {
+
+        if (!this.isValidName(this.name)) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'O campo Nome deve conter apenas letras e acentos.',
+          });
+          return;
+        }
+
+        if (!this.isValidNumber(this.cep)) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'O campo CEP deve conter apenas números.',
+          });
+          return;
+        }
+
+        if (!this.isValidNumber(this.cpf)) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'O campo CPF deve conter apenas números.',
+          });
+          return;
+        }
+
+        if (!this.isValidPhone(this.phone)) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'O campo Telefone deve conter apenas números.',
+          });
+          return;
+        }
+
+        const responseCadastro = await axios.post('/cadastrar', {
           Name: this.name,
           Username: this.username,
           Password: this.password,
@@ -133,14 +200,29 @@ export default {
           Documento: this.document,
         });
 
-        Swal.fire({
-          icon: 'success',
-          title: 'Cadastro efetuado com sucesso!',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        this.closeModal();
-        this.resetForm();
+        if (responseCadastro.status >= 200 && responseCadastro.status < 300) {
+          const responseLogin = await axios.post('/login', {
+            Username: this.username,
+            Password: this.password,
+          });
+
+          localStorage.setItem('token', responseLogin.data.token);
+
+          this.closeModal();
+          this.resetForm();
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Cadastro efetuado com sucesso!',
+            showConfirmButton: false,
+            timer: 3500,
+          }).then(() => {
+            location.reload();
+          });
+
+          
+
+        }
       } catch (error) {
         console.error('Erro ao enviar formulário:', error);
       }
@@ -238,6 +320,7 @@ label {
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
+  margin-top: 10px;
 }
 
 input {

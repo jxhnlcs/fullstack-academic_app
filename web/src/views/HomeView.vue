@@ -8,7 +8,7 @@
       <div class="content-text">
         <h2>Uma ampla seleção de cursos</h2>
         <p>Escolha entre várias opções de cursos em vídeo online e presenciais para melhorar seus estudos.</p>
-        <button @click="openModal">Entrar</button>
+        <button v-if="!isLoggedIn" @click="openModal">Entrar</button>
       </div>
     </div>
 
@@ -76,6 +76,15 @@ export default {
     FormModal,
   },
 
+  created() {
+    this.fetchCourses();
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.isLoggedIn = true;
+    }
+  },
+
   data() {
     return {
       courses: [],
@@ -91,6 +100,7 @@ export default {
       selectedFilters: [],
       showFilterDropdown: false,
       modalVisible: false,
+      isLoggedIn: false,
     };
   },
 
@@ -167,10 +177,6 @@ export default {
 
       return colorMap[type] || '#000';
     },
-  },
-
-  created() {
-    this.fetchCourses();
   },
 
   beforeRouteEnter(to, from, next) {
@@ -306,7 +312,7 @@ export default {
   transition: 0.5s;
 }
 
-.filter-icon:hover{
+.filter-icon:hover {
   color: var(--primary);
   box-shadow: rgba(0, 190, 76, 0.436) 0px 2px 8px 0px;
 }
@@ -330,5 +336,4 @@ export default {
   display: block;
   margin-bottom: 5px;
 }
-
 </style>

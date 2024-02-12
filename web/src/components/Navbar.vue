@@ -21,20 +21,31 @@
         </ul>
       </div>
 
-      <div class="login-btn">
-        <button @click="fazerLogin">Entrar</button>
+      <div v-if="isLoggedIn" class="user-nav">
+        <i class="bx bxs-user"></i> Bem-vindo(a),⠀<span>{{ name }}</span>!
       </div>
     </div>
   </nav>
 </template>
 
 <script>
+import { jwtDecode } from 'jwt-decode'
 export default {
-  methods: {
-    fazerLogin() {
-      console.log('Botão "Fazer Login" clicado');
+  data() {
+    return {
+      isLoggedIn: false,
+    };
+  },
+
+  created() {
+    const token = localStorage.getItem('token');
+    const decodedToken = jwtDecode(token);
+    console.log(decodedToken)
+    this.name = decodedToken.name
+    if (token) {
+      this.isLoggedIn = true;
     }
-  }
+  },
 };
 </script>
 
@@ -70,20 +81,29 @@ export default {
   color: var(--primary);
 }
 
-.login-btn button {
-  font-weight: 700;
+.user-nav {
+  font-weight: 400;
   font-size: 16px;
-  border-radius: 5px;
-  padding: 8px 16px;
-  border: none;
-  cursor: pointer;
-  transition: 0.5s;
-  background-color: var(--primary);
-  color: var(--white);
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  color: var(--tertiary);
+  cursor: default;
 }
 
-.login-btn button:hover {
-  background-color: #0b7334;
-  box-shadow: 0px 10px 40px -12px var(--primary);
+.user-nav span {
+  font-weight: 700;
+  margin-left: -5px;
+}
+
+.user-nav i {
+  margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+
+  .user-nav {
+    display: none;
+  }
 }
 </style>
