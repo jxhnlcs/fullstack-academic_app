@@ -8,9 +8,11 @@
       <div class="content-text">
         <h2>Uma ampla seleção de cursos</h2>
         <p>Escolha entre várias opções de cursos em vídeo online e presenciais para melhorar seus estudos.</p>
-        <button @click="entrar">Entrar</button>
+        <button @click="openModal">Entrar</button>
       </div>
     </div>
+
+    <FormModal :showModal="modalVisible" @close-modal="closeModal" />
 
     <div class="courses">
       <div class="container">
@@ -48,7 +50,7 @@
                 <p class="card-text">
                   <i class="bx bx-category"></i> {{ course.Category }}
                 </p>
-                <a href="#" class="btn btn-primary">Saiba Mais</a>
+                <button @click="openModal" class="btn btn-primary">Saiba Mais</button>
               </div>
             </div>
           </div>
@@ -63,6 +65,7 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue';
+import FormModal from '@/components/FormModal.vue';
 import Footer from '@/components/Footer.vue';
 import axios from '@/utils/axios'
 
@@ -70,6 +73,7 @@ export default {
   components: {
     Navbar,
     Footer,
+    FormModal,
   },
 
   data() {
@@ -86,6 +90,7 @@ export default {
       },
       selectedFilters: [],
       showFilterDropdown: false,
+      modalVisible: false,
     };
   },
 
@@ -99,6 +104,14 @@ export default {
   },
 
   methods: {
+
+    openModal() {
+      this.modalVisible = true
+    },
+
+    closeModal() {
+      this.modalVisible = false
+    },
 
     toggleFilterDropdown() {
       this.showFilterDropdown = !this.showFilterDropdown;
