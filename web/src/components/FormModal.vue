@@ -4,69 +4,91 @@
       <div class="modal-header">
         <button class="close-button" @click="closeModal">&#10006;</button>
       </div>
-      <div class="content-modal">
-        <div class="left-modal">
-          <h1>Antes de conferir seu curso<br>vamos nos cadastrar!</h1>
-          <img src="../assets/image/course-app-animate.svg" alt="Your Image" />
+      <div>
+        <div class="content-modal" v-if="!courseModal">
+          <div class="left-modal">
+            <h1>Antes de conferir seu curso<br>vamos nos cadastrar!</h1>
+            <img src="../assets/image/course-app-animate.svg" alt="Your Image" />
+          </div>
+          <div class="right-modal">
+            <div v-if="step === 1">
+              <h3>Informações Principais</h3>
+              <form @submit.prevent="nextStep">
+
+                <label for="name">Nome*</label>
+                <input v-model="name" type="text" id="name">
+
+                <label for="email">E-mail*</label>
+                <input v-model="email" type="email" id="email">
+
+                <label for="phone">Telefone*</label>
+                <input @input="formatarTelefone" v-model="phone" type="tel" id="phone">
+
+                <div class="next">
+                  <button class="prosseguir" type="submit"><i class='bx bx-right-arrow-alt'></i></button>
+                </div>
+              </form>
+            </div>
+
+            <div v-else-if="step === 2">
+              <h3>Informações Adicionais</h3>
+              <form @submit.prevent="nextStep">
+                <label for="cep">CEP*</label>
+                <input @input="formatarCep" v-model="cep" type="text" id="cep">
+
+                <label for="cpf">CPF*</label>
+                <input @input="formatarCpf" v-model="cpf" type="text" id="cpf">
+
+                <label for="birthdate">Data de Nascimento*</label>
+                <input v-model="birthdate" type="date" id="birthdate">
+
+                <div class="buttons-next">
+                  <button class="prosseguir" @click.prevent="prevStep"><i class='bx bx-left-arrow-alt'></i></button>
+                  <button class="prosseguir" type="submit"><i class='bx bx-right-arrow-alt'></i></button>
+                </div>
+              </form>
+            </div>
+
+            <div v-else-if="step === 3">
+              <h3>Informações Finais</h3>
+              <form @submit.prevent="submitForm">
+
+                <label for="username">Usuário*</label>
+                <input v-model="username" type="text" id="username">
+
+                <label for="password">Senha*</label>
+                <input v-model="password" type="password" id="password">
+
+                <label for="document">Enviar Documento*</label>
+                <input class="file" type="file" id="document" accept=".pdf, .jpg, .png">
+
+                <div class="buttons-next">
+                  <button class="prosseguir" @click.prevent="prevStep"><i class='bx bx-left-arrow-alt'></i></button>
+                  <button class="prosseguir" type="submit">Enviar</button>
+                </div>
+
+              </form>
+            </div>
+          </div>
         </div>
-        <div class="right-modal">
-          <div v-if="step === 1">
-            <h3>Informações Principais</h3>
-            <form @submit.prevent="nextStep">
-
-              <label for="name">Nome*</label>
-              <input v-model="name" type="text" id="name">
-
-              <label for="email">E-mail*</label>
-              <input v-model="email" type="email" id="email">
-
-              <label for="phone">Telefone*</label>
-              <input @input="formatarTelefone" v-model="phone" type="tel" id="phone">
-
-              <div class="next">
-                <button class="prosseguir" type="submit"><i class='bx bx-right-arrow-alt'></i></button>
-              </div>
-            </form>
+        <div class="payment-course" v-else>
+          <h3>Detalhes do Pedido</h3>
+          <div class="selected-course-details">
+            <div class="row-course">
+              <p class="course-name"><i :class="getIconClass(selectedCourse.Type)" :style="{ color: getIconColor(selectedCourse.Type) }"></i><strong>{{ selectedCourse.Title }}</strong></p>
+              <p v-if="selectedCourse.Price">R$ {{ selectedCourse.Price.toFixed(2).replace('.', ',') }}</p>
+            </div>
+            <p>{{ selectedCourse.Description }}</p>
           </div>
+          <label class="installments" for="installments">Número de Parcelas:</label>
+          <select class="parcel-select" v-model="selectedInstallments" id="installments">
+            <option value="1">1x</option>
+            <option value="2">2x</option>
+            <option value="3">3x</option>
+          </select>
 
-          <div v-else-if="step === 2">
-            <h3>Informações Adicionais</h3>
-            <form @submit.prevent="nextStep">
-              <label for="cep">CEP*</label>
-              <input @input="formatarCep" v-model="cep" type="text" id="cep">
-
-              <label for="cpf">CPF*</label>
-              <input @input="formatarCpf" v-model="cpf" type="text" id="cpf">
-
-              <label for="birthdate">Data de Nascimento*</label>
-              <input v-model="birthdate" type="date" id="birthdate">
-
-              <div class="buttons-next">
-                <button class="prosseguir" @click.prevent="prevStep"><i class='bx bx-left-arrow-alt'></i></button>
-                <button class="prosseguir" type="submit"><i class='bx bx-right-arrow-alt'></i></button>
-              </div>
-            </form>
-          </div>
-
-          <div v-else-if="step === 3">
-            <h3>Informações Finais</h3>
-            <form @submit.prevent="submitForm">
-
-              <label for="username">Usuário*</label>
-              <input v-model="username" type="text" id="username">
-
-              <label for="password">Senha*</label>
-              <input v-model="password" type="password" id="password">
-
-              <label for="document">Enviar Documento*</label>
-              <input class="file" type="file" id="document" accept=".pdf, .jpg, .png">
-
-              <div class="buttons-next">
-                <button class="prosseguir" @click.prevent="prevStep"><i class='bx bx-left-arrow-alt'></i></button>
-                <button class="prosseguir" type="submit">Enviar</button>
-              </div>
-
-            </form>
+          <div class="button-payment">
+            <button class="prosseguir" type="submit" @click.prevent="paymentForm">Comprar</button>
           </div>
         </div>
       </div>
@@ -93,11 +115,18 @@ export default {
       username: '',
       password: '',
       document: null,
+      courseModal: false,
+      selectedInstallments: '1',
     };
   },
 
   props: {
     showModal: Boolean,
+    selectedCourse: Object,
+  },
+
+  created() {
+    this.checkTokenAndSetModalType();
   },
 
   methods: {
@@ -134,6 +163,23 @@ export default {
 
     openModal() {
       this.showModal = true;
+    },
+
+    openModal(courseModal = false, selectedCourse = {}) {
+      if (!courseModal) {
+        this.checkTokenAndSetModalType();
+      }
+
+      this.courseModal = courseModal;
+      this.selectedCourse = selectedCourse;
+      this.showModal = true;
+    },
+
+    async checkTokenAndSetModalType() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        this.courseModal = true;
+      }
     },
 
     closeModal() {
@@ -219,7 +265,7 @@ export default {
             location.reload();
           });
 
-          
+
 
         }
       } catch (error) {
@@ -239,6 +285,38 @@ export default {
       this.birthdate = '';
       this.document = null;
     },
+
+    getIconClass(type) {
+      const iconMap = {
+        Tecnologia: 'bx bx-code',
+        Marketing: 'bx bx-bar-chart',
+        Design: 'bx bx-paint',
+        Arte: 'bx bx-image',
+        Idiomas: 'bx bx-globe',
+        Negócios: 'bx bx-briefcase',
+        Exercício: 'bx bx-dumbbell',
+      };
+
+      return iconMap[type] || 'bx-question-mark';
+    },
+
+    getIconColor(type) {
+      const colorMap = {
+        Tecnologia: '#3498db',
+        Marketing: '#e74c3c',
+        Design: '#2ecc71',
+        Arte: '#f39c12',
+        Idiomas: '#9b59b6',
+        Negócios: '#34495e',
+        Exercício: '#1abc9c',
+      };
+
+      return colorMap[type] || '#000';
+    },
+
+    async paymentForm() {
+      console.log('pago')
+    }
 
   },
 
@@ -370,4 +448,46 @@ input[type="file"] {
   display: flex;
   justify-content: space-between;
 }
+
+.payment-course {
+  margin-top: -30px;
+}
+
+.payment-course h3 {
+  font-size: 30px;
+}
+
+.row-course {
+  display: flex;
+  justify-content: space-between;
+}
+
+.course-name{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.course-name i{
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+.installments{
+  color: black;
+}
+
+.button-payment{
+  display: flex;
+  justify-content: end;
+}
+
+.installments, .parcel-select{
+  margin-top: -20px;
+}
+
+.parcel-select{
+  margin-left: 5px;
+}
+
 </style>

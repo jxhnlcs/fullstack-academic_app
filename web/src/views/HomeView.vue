@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <FormModal :showModal="modalVisible" @close-modal="closeModal" />
+    <FormModal :showModal="modalVisible" @close-modal="closeModal" :selectedCourse="selectedCourse" />
 
     <div class="courses">
       <div class="container">
@@ -50,7 +50,7 @@
                 <p class="card-text">
                   <i class="bx bx-category"></i> {{ course.Category }}
                 </p>
-                <button @click="openModal" class="btn btn-primary">Saiba Mais</button>
+                <button @click="openModal(course)" class="btn btn-primary">Saiba Mais</button>
               </div>
             </div>
           </div>
@@ -115,8 +115,9 @@ export default {
 
   methods: {
 
-    openModal() {
-      this.modalVisible = true
+    openModal(course) {
+      this.modalVisible = true;
+      this.selectedCourse = course;
     },
 
     closeModal() {
@@ -125,20 +126,6 @@ export default {
 
     toggleFilterDropdown() {
       this.showFilterDropdown = !this.showFilterDropdown;
-    },
-
-    getIconColor(type) {
-      const colorMap = {
-        Tecnologia: '#3498db',
-        Marketing: '#e74c3c',
-        Design: '#2ecc71',
-        Arte: '#f39c12',
-        Idiomas: '#9b59b6',
-        Negócios: '#34495e',
-        Exercício: '#1abc9c',
-      };
-
-      return colorMap[type] || '#000';
     },
 
     async fetchCourses() {
