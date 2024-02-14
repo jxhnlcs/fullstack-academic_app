@@ -1,11 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
+import MyCoursesView from '../views/MyCoursesView.vue';
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: HomeView,
+    meta: { title: 'Página Inicial' },
+  },
+
+  {
+    path: '/mycourses',
+    name: 'mycourses',
+    component: MyCoursesView,
     meta: { title: 'Página Inicial' },
   },
 ];

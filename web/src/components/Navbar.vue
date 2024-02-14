@@ -12,12 +12,16 @@
 
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Página Inicial</a>
-          </li>
+          <router-link class="router-link" to="/">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Página Inicial</a>
+            </li>
+          </router-link>
+          <router-link class="router-link" to="/mycourses">
           <li class="nav-item">
             <a class="nav-link" href="#">Cursos</a>
           </li>
+        </router-link>
         </ul>
       </div>
 
@@ -86,6 +90,8 @@ export default {
   color: var(--primary);
 }
 
+
+
 .user-nav {
   font-weight: 400;
   font-size: 16px;
@@ -94,6 +100,10 @@ export default {
   align-items: center;
   color: var(--tertiary);
   cursor: default;
+}
+
+.router-link{
+  text-decoration: none;
 }
 
 .user-nav span {

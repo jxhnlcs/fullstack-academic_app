@@ -75,7 +75,9 @@
           <h3>Detalhes do Pedido</h3>
           <div class="selected-course-details">
             <div class="row-course">
-              <p class="course-name"><i :class="getIconClass(selectedCourse.Type)" :style="{ color: getIconColor(selectedCourse.Type) }"></i><strong>{{ selectedCourse.Title }}</strong></p>
+              <p class="course-name"><i :class="getIconClass(selectedCourse.Type)"
+                  :style="{ color: getIconColor(selectedCourse.Type) }"></i><strong>{{ selectedCourse.Title }}</strong>
+              </p>
               <p v-if="selectedCourse.Price">R$ {{ selectedCourse.Price.toFixed(2).replace('.', ',') }}</p>
             </div>
             <p>{{ selectedCourse.Description }}</p>
@@ -99,6 +101,7 @@
 <script>
 import axios from '@/utils/axios';
 import Swal from 'sweetalert2';
+import { jwtDecode } from "jwt-decode";
 
 export default {
 
@@ -127,6 +130,17 @@ export default {
 
   created() {
     this.checkTokenAndSetModalType();
+
+    const token = localStorage.getItem("token");
+
+    if (token && typeof token === "string") {
+      try {
+        const decodedToken = jwtDecode(token);
+        this.userId = decodedToken.userid
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
   },
 
   methods: {
@@ -152,12 +166,12 @@ export default {
     },
 
     isValidNumber(value) {
-      const regex = /^[0-9]+$/;
+      const regex = /^[0-9.-]+$/;
       return regex.test(value);
     },
 
     isValidPhone(value) {
-      const regex = /^[0-9]+$/;
+      const regex = /^[0-9.\-() ]+$/;
       return regex.test(value);
     },
 
@@ -265,8 +279,6 @@ export default {
             location.reload();
           });
 
-
-
         }
       } catch (error) {
         console.error('Erro ao enviar formulário:', error);
@@ -315,7 +327,23 @@ export default {
     },
 
     async paymentForm() {
-      console.log('pago')
+      try {
+
+        const userID = this.userId
+        const courseID = this.selectedCourse.CourseID;
+
+        await axios.post('/user-course', { userID, courseID });
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Compra efetuada com sucesso!',
+          showConfirmButton: false,
+          timer: 2500,
+        })
+        this.closeModal();
+      } catch (error) {
+        console.error('Erro durante o pagamento:', error);
+      }
     }
 
   },
@@ -462,32 +490,32 @@ input[type="file"] {
   justify-content: space-between;
 }
 
-.course-name{
+.course-name {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.course-name i{
+.course-name i {
   font-size: 20px;
   margin-right: 5px;
 }
 
-.installments{
+.installments {
   color: black;
 }
 
-.button-payment{
+.button-payment {
   display: flex;
   justify-content: end;
 }
 
-.installments, .parcel-select{
+.installments,
+.parcel-select {
   margin-top: -20px;
 }
 
-.parcel-select{
+.parcel-select {
   margin-left: 5px;
 }
-
 </style>

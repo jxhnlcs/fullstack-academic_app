@@ -118,6 +118,7 @@ export default {
     openModal(course) {
       this.modalVisible = true;
       this.selectedCourse = course;
+      console.log(this.selectedCourse)
     },
 
     closeModal() {
