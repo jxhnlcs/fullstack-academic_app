@@ -342,7 +342,12 @@ export default {
         })
         this.closeModal();
       } catch (error) {
-        console.error('Erro durante o pagamento:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Ops! você já tem esse curso',
+          showConfirmButton: false,
+          timer: 2500,
+        })
       }
     }
 
@@ -518,4 +523,16 @@ input[type="file"] {
 .parcel-select {
   margin-left: 5px;
 }
+
+
+
+@media (max-width: 768px) {
+  .left-modal{
+    display: none;
+  }
+  .modal-box {
+  width: 100%;
+}
+}
+
 </style>

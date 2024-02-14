@@ -19,7 +19,7 @@
           </router-link>
           <router-link class="router-link" to="/mycourses">
           <li class="nav-item">
-            <a class="nav-link" href="#">Cursos</a>
+            <a class="nav-link" href="#">Meus Cursos</a>
           </li>
         </router-link>
         </ul>
