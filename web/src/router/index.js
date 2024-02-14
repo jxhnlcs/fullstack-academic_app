@@ -14,7 +14,7 @@ const routes = [
     path: '/mycourses',
     name: 'mycourses',
     component: MyCoursesView,
-    meta: { title: 'Página Inicial' },
+    meta: { title: 'Meus Cursos' },
   },
 ];
 

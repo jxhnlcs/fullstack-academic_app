@@ -168,7 +168,7 @@ export default {
   },
 
   beforeRouteEnter(to, from, next) {
-    const documentTitle = typeof to.meta.title === 'string' ? to.meta.title : 'Seu Título Padrão';
+    const documentTitle = typeof to.meta.title === 'string' ? to.meta.title : 'Enrofy';
     document.title = documentTitle;
     next();
   }

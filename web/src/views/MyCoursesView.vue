@@ -50,6 +50,12 @@ export default {
     Footer,
   },
 
+  beforeRouteEnter(to, from, next) {
+    const documentTitle = typeof to.meta.title === 'string' ? to.meta.title : 'Enrofy';
+    document.title = documentTitle;
+    next();
+  },
+
   created() {
     this.fetchUserCourses();
   },
